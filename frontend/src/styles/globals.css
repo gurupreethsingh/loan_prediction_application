@@ -1,0 +1,16 @@
+/* global.css */
+
+.container-width {
+  max-width: 1600px; 
+  margin:auto;
+}
+
+.container-full-width {
+  max-width: 1900px; 
+  margin:auto;
+}
+
+.container-narrow-width {
+  max-width: 1200px; 
+  margin:auto;
+}
