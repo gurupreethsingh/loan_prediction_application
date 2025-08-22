@@ -6,11 +6,8 @@ const Register = () => {
   const navigate = useNavigate();
   const API = globalBackendRoute;
 
-  // --- form state ---
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
-
-  // --- UI state ---
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
 
@@ -51,7 +48,7 @@ const Register = () => {
 
     try {
       setSubmitting(true);
-      const res = await fetch(`${API}/register`, {
+      const res = await fetch(`${API}/api/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

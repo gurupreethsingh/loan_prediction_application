@@ -21,7 +21,9 @@ const userSchema = new mongoose.Schema({
       "alumni_relations", // Alumni Relations Officer
       "business_analyst", // New role: Business Analyst
       "content_creator", // New role: Content Creator
-      "course_coordinator", // Course Coordinator
+        "course_coordinator", // Course Coordinator
+        "customer",
+      "client",
       "customer_support", // New role: Customer Support Representative
       "data_scientist", // New role: Data Scientist
       "department_head", // Head of Department

@@ -1,25 +1,29 @@
-// src/layouts/main_layout/MainLayout.jsx
+// src/components/common_components/MainLayout.jsx
 import React, { useEffect } from "react";
-
 import Header from "../header_component/Header";
 import Footer from "../footer_component/Footer";
+import { Routes, Route } from "react-router-dom";
+import { PrivateRoute, PublicRoute } from "../auth_components/AuthManager";
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-import Login from "../../pages/user_pages/Login";
 import Homepage from "../../pages/common_pages/Homepage";
+import PageNotFound from "../../pages/common_pages/PageNotFound";
+import ContactUs from "../../pages/common_pages/ContactUs";
+import AboutUs from "../../pages/common_pages/AboutUs";
 import Register from "../../pages/user_pages/Register";
+import Login from "../../pages/user_pages/Login";
+import SuperAdminDashboard from "../../pages/superadmin_pages/SuperAdminDashboard";
+import UserDashboard from "../../pages/user_pages/UserDashboard";
+import Profile from "../../pages/user_pages/Profile";
+import UpdateProfile from "../../pages/user_pages/UpdateProfile";
+import AllUsers from "../../pages/user_pages/AllUsers";
+import SingleUser from "../../pages/user_pages/SingleUser";
 import ForgotPassword from "../../pages/user_pages/ForgotPassword";
 import ResetPassword from "../../pages/user_pages/ResetPassword";
-import UserDashboard from "../../pages/user_pages/UserDashboard";
-import SuperAdminDashboard from "../../pages/superadmin_pages/SuperAdminDashboard";
-import AboutUs from "../../pages/common_pages/AboutUs";
-import ContactUs from "../../pages/common_pages/ContactUs";
-import PageNotFound from "../../pages/common_pages/PageNotFound";
-import PrivacyPolicy from "../../pages/common_pages/PrivacyPolicy";
+
+import RoleLanding from "../common_components/RoleLanding";
 
 // Small wrapper to set document title for each route
-const Page = ({ title, children }) => {
+const PageTitle = ({ title, children }) => {
   useEffect(() => {
     document.title = `Ecoders - ${title}` || "Ecoders - App";
   }, [title]);
@@ -29,59 +33,52 @@ const Page = ({ title, children }) => {
 
 const MainLayout = () => {
   return (
-    <div className="bg-white">
-      <Router>
-        <Header />
+    <div className="min-h-screen text-gray-900">
+      <Header />
+      <main className="flex-grow py-6">
         <Routes>
-          {/* Home */}
           <Route
             path="/"
             element={
-              <Page title="Homepage">
-                <Homepage title="Homepage" />
-              </Page>
+              <PageTitle title="Home">
+                <Homepage />
+              </PageTitle>
             }
           />
           <Route
             path="/home"
             element={
-              <Page title="Homepage">
-                <Homepage title="Homepage" />
-              </Page>
+              <PageTitle title="Home">
+                <Homepage />
+              </PageTitle>
             }
           />
           <Route
             path="/homepage"
             element={
-              <Page title="Homepage">
-                <Homepage title="Homepage" />
-              </Page>
+              <PageTitle title="Home">
+                <Homepage />
+              </PageTitle>
             }
           />
 
-          {/* Static pages */}
-          <Route
-            path="/about-us"
-            element={
-              <Page title="About Us">
-                <AboutUs title="About Us" />
-              </Page>
-            }
-          />
+          {/* Public pages */}
           <Route
             path="/contact-us"
             element={
-              <Page title="Contact Us">
-                <ContactUs title="Contact Us" />
-              </Page>
+              <PageTitle title="Contact Us">
+                <ContactUs />
+              </PageTitle>
             }
           />
           <Route
-            path="/privacy-policy"
+            path="/about-us"
             element={
-              <Page title="Privacy Policy">
-                <PrivacyPolicy title="Privacy Policy" />
-              </Page>
+              <PrivateRoute>
+                <PageTitle title="About Us">
+                  <AboutUs />
+                </PageTitle>
+              </PrivateRoute>
             }
           />
 
@@ -89,51 +86,116 @@ const MainLayout = () => {
           <Route
             path="/login"
             element={
-              <Page title="Login">
-                <Login title="Login" />
-              </Page>
+              <PublicRoute>
+                <PageTitle title="Login">
+                  <Login />
+                </PageTitle>
+              </PublicRoute>
             }
           />
           <Route
             path="/register"
             element={
-              <Page title="Register">
-                <Register title="Register" />
-              </Page>
+              <PublicRoute>
+                <PageTitle title="Register">
+                  <Register />
+                </PageTitle>
+              </PublicRoute>
             }
           />
           <Route
             path="/forgot-password"
             element={
-              <Page title="Forgot Password">
-                <ForgotPassword title="Forgot Password" />
-              </Page>
+              <PageTitle title="Forgot Password">
+                <ForgotPassword />
+              </PageTitle>
             }
           />
           <Route
             path="/reset-password"
             element={
-              <Page title="Reset Password">
-                <ResetPassword title="Reset Password" />
-              </Page>
+              <PageTitle title="Reset Password">
+                <ResetPassword />
+              </PageTitle>
             }
           />
 
-          {/* Dashboards */}
+          {/* “Smart” dashboard route */}
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <RoleLanding />
+              </PrivateRoute>
+            }
+          />
+
+          {/* Specific dashboards */}
           <Route
             path="/user-dashboard"
             element={
-              <Page title="User Dashboard">
-                <UserDashboard title="User Dashboard" />
-              </Page>
+              <PrivateRoute
+                allowedRoles={["user", "customer", "client", "superadmin"]}
+              >
+                <PageTitle title="User Dashboard">
+                  <UserDashboard />
+                </PageTitle>
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/superadmin-dashboard"
+            element={
+              <PrivateRoute allowedRoles={["superadmin"]}>
+                <PageTitle title="SuperAdmin Dashboard">
+                  <SuperAdminDashboard />
+                </PageTitle>
+              </PrivateRoute>
+            }
+          />
+
+          {/* Profile */}
+          <Route
+            path="/profile/:id"
+            element={
+              <PrivateRoute>
+                <PageTitle title="Profile">
+                  <Profile />
+                </PageTitle>
+              </PrivateRoute>
             }
           />
           <Route
-            path="/super-admin-dashboard"
+            path="/update-profile/:id"
             element={
-              <Page title="Super Admin Dashboard">
-                <SuperAdminDashboard title="Super Admin Dashboard" />
-              </Page>
+              <PrivateRoute>
+                <PageTitle title="Update Profile">
+                  <UpdateProfile />
+                </PageTitle>
+              </PrivateRoute>
+            }
+          />
+
+          {/* Admin-only management routes */}
+          <Route
+            path="/all-users"
+            element={
+              <PrivateRoute allowedRoles={["superadmin"]}>
+                <PageTitle title="All Users">
+                  <AllUsers />
+                </PageTitle>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/single-user/:id"
+            element={
+              <PrivateRoute allowedRoles={["superadmin"]}>
+                <PageTitle title="Single User">
+                  <SingleUser />
+                </PageTitle>
+              </PrivateRoute>
             }
           />
 
@@ -141,22 +203,22 @@ const MainLayout = () => {
           <Route
             path="/page-not-found"
             element={
-              <Page title="Page Not Found">
-                <PageNotFound title="Page Not Found" />
-              </Page>
+              <PageTitle title="404 Not Found">
+                <PageNotFound />
+              </PageTitle>
             }
           />
           <Route
             path="/*"
             element={
-              <Page title="Page Not Found">
-                <PageNotFound title="Page Not Found" />
-              </Page>
+              <PageTitle title="404 Not Found">
+                <PageNotFound />
+              </PageTitle>
             }
           />
         </Routes>
-        <Footer />
-      </Router>
+      </main>
+      <Footer />
     </div>
   );
 };
