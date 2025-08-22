@@ -1,91 +1,98 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <div>
-      <div className="footer bg-gray-600 p-5 shadow">
-        <div className="footer_layout flex justify-evenly items-center flex-wrap">
-          <div className="address text-center">
-            <h3 className="address_heading font-bold  text-gray-100">
-              Address
-            </h3>
-            <ul className="nav flex-column">
-              <li className="nav-item">
-                <a className="nav-link text-gray-100" href="/contact-us">
+    <footer className="w-full bg-gray-800 text-gray-100">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="text-center sm:text-left">
+            <h3 className="text-lg font-semibold mb-3">Address</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link to="/contact-us" className="hover:underline">
                   Nihal, #142, Bangalore
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
-          <div className="address text-center">
-            <h3 className="quicklinks_heading font-bold  text-gray-100">
-              Quick Links
-            </h3>
-            <ul className="nav flex-column">
-              <li className="nav-item">
-                <a className="nav-link text-gray-100" href="/home">
+
+          <div className="text-center sm:text-left">
+            <h3 className="text-lg font-semibold mb-3">Quick Links</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link to="/home" className="hover:underline">
                   Home
-                </a>
+                </Link>
               </li>
-              <li className="nav-item">
-                <a className="nav-link text-gray-100" href="/about-us">
+              <li>
+                <Link to="/about-us" className="hover:underline">
                   About
-                </a>
+                </Link>
               </li>
-              <li className="nav-item">
-                <a className="nav-link text-gray-100" href="/contact-us">
+              <li>
+                <Link to="/contact-us" className="hover:underline">
                   Contact
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
-          <div className="social_section text-center">
-            <h3 className="social_heading font-bold text-gray-100">Social</h3>
-            <ul className="nav flex-column">
-              <li className="nav-item">
+
+          <div className="text-center sm:text-left">
+            <h3 className="text-lg font-semibold mb-3">Social</h3>
+            <ul className="space-y-2">
+              <li>
                 <a
-                  className="nav-link text-gray-100"
                   href="https://www.facebook.com"
                   target="_blank"
+                  rel="noreferrer"
+                  className="hover:underline"
                 >
                   Facebook
                 </a>
               </li>
-              <li className="nav-item">
+              <li>
                 <a
-                  className="nav-link text-gray-100"
                   href="https://www.twitter.com"
                   target="_blank"
+                  rel="noreferrer"
+                  className="hover:underline"
                 >
                   Twitter
                 </a>
               </li>
-              <li className="nav-item">
+              <li>
                 <a
-                  className="nav-link text-gray-100"
                   href="https://www.linkedin.com"
                   target="_blank"
+                  rel="noreferrer"
+                  className="hover:underline"
                 >
                   LinkedIn
                 </a>
               </li>
             </ul>
           </div>
-          <div className="license_section text-center">
-            <h3 className="_heading font-bold  text-gray-100">
-              Licence & Agreement
+
+          <div className="text-center sm:text-left">
+            <h3 className="text-lg font-semibold mb-3">
+              Licence &amp; Agreement
             </h3>
-            <ul className="nav flex-column">
-              <li className="nav-item">
-                <a className="nav-link text-gray-100" href="/privacy-policy">
+            <ul className="space-y-2">
+              <li>
+                <Link to="/privacy-policy" className="hover:underline">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
         </div>
+
+        <div className="mt-8 text-center text-sm text-gray-300">
+          © {new Date().getFullYear()} Your Company. All rights reserved.
+        </div>
       </div>
-    </div>
+    </footer>
   );
 };
 

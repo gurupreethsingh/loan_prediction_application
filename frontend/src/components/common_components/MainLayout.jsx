@@ -29,133 +29,135 @@ const Page = ({ title, children }) => {
 
 const MainLayout = () => {
   return (
-    <Router>
-      <Header />
-      <Routes>
-        {/* Home */}
-        <Route
-          path="/"
-          element={
-            <Page title="Homepage">
-              <Homepage title="Homepage" />
-            </Page>
-          }
-        />
-        <Route
-          path="/home"
-          element={
-            <Page title="Homepage">
-              <Homepage title="Homepage" />
-            </Page>
-          }
-        />
-        <Route
-          path="/homepage"
-          element={
-            <Page title="Homepage">
-              <Homepage title="Homepage" />
-            </Page>
-          }
-        />
+    <div className="min-h-screen flex flex-col bg-white">
+      <Router>
+        <Header />
+        <Routes>
+          {/* Home */}
+          <Route
+            path="/"
+            element={
+              <Page title="Homepage">
+                <Homepage title="Homepage" />
+              </Page>
+            }
+          />
+          <Route
+            path="/home"
+            element={
+              <Page title="Homepage">
+                <Homepage title="Homepage" />
+              </Page>
+            }
+          />
+          <Route
+            path="/homepage"
+            element={
+              <Page title="Homepage">
+                <Homepage title="Homepage" />
+              </Page>
+            }
+          />
 
-        {/* Static pages */}
-        <Route
-          path="/about-us"
-          element={
-            <Page title="About Us">
-              <AboutUs title="About Us" />
-            </Page>
-          }
-        />
-        <Route
-          path="/contact-us"
-          element={
-            <Page title="Contact Us">
-              <ContactUs title="Contact Us" />
-            </Page>
-          }
-        />
-        <Route
-          path="/privacy-policy"
-          element={
-            <Page title="Privacy Policy">
-              <PrivacyPolicy title="Privacy Policy" />
-            </Page>
-          }
-        />
+          {/* Static pages */}
+          <Route
+            path="/about-us"
+            element={
+              <Page title="About Us">
+                <AboutUs title="About Us" />
+              </Page>
+            }
+          />
+          <Route
+            path="/contact-us"
+            element={
+              <Page title="Contact Us">
+                <ContactUs title="Contact Us" />
+              </Page>
+            }
+          />
+          <Route
+            path="/privacy-policy"
+            element={
+              <Page title="Privacy Policy">
+                <PrivacyPolicy title="Privacy Policy" />
+              </Page>
+            }
+          />
 
-        {/* Auth */}
-        <Route
-          path="/login"
-          element={
-            <Page title="Login">
-              <Login title="Login" />
-            </Page>
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            <Page title="Register">
-              <Register title="Register" />
-            </Page>
-          }
-        />
-        <Route
-          path="/forgot-password"
-          element={
-            <Page title="Forgot Password">
-              <ForgotPassword title="Forgot Password" />
-            </Page>
-          }
-        />
-        <Route
-          path="/reset-password"
-          element={
-            <Page title="Reset Password">
-              <ResetPassword title="Reset Password" />
-            </Page>
-          }
-        />
+          {/* Auth */}
+          <Route
+            path="/login"
+            element={
+              <Page title="Login">
+                <Login title="Login" />
+              </Page>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <Page title="Register">
+                <Register title="Register" />
+              </Page>
+            }
+          />
+          <Route
+            path="/forgot-password"
+            element={
+              <Page title="Forgot Password">
+                <ForgotPassword title="Forgot Password" />
+              </Page>
+            }
+          />
+          <Route
+            path="/reset-password"
+            element={
+              <Page title="Reset Password">
+                <ResetPassword title="Reset Password" />
+              </Page>
+            }
+          />
 
-        {/* Dashboards */}
-        <Route
-          path="/user-dashboard"
-          element={
-            <Page title="User Dashboard">
-              <UserDashboard title="User Dashboard" />
-            </Page>
-          }
-        />
-        <Route
-          path="/super-admin-dashboard"
-          element={
-            <Page title="Super Admin Dashboard">
-              <SuperAdminDashboard title="Super Admin Dashboard" />
-            </Page>
-          }
-        />
+          {/* Dashboards */}
+          <Route
+            path="/user-dashboard"
+            element={
+              <Page title="User Dashboard">
+                <UserDashboard title="User Dashboard" />
+              </Page>
+            }
+          />
+          <Route
+            path="/super-admin-dashboard"
+            element={
+              <Page title="Super Admin Dashboard">
+                <SuperAdminDashboard title="Super Admin Dashboard" />
+              </Page>
+            }
+          />
 
-        {/* 404 */}
-        <Route
-          path="/page-not-found"
-          element={
-            <Page title="Page Not Found">
-              <PageNotFound title="Page Not Found" />
-            </Page>
-          }
-        />
-        <Route
-          path="/*"
-          element={
-            <Page title="Page Not Found">
-              <PageNotFound title="Page Not Found" />
-            </Page>
-          }
-        />
-      </Routes>
-      <Footer />
-    </Router>
+          {/* 404 */}
+          <Route
+            path="/page-not-found"
+            element={
+              <Page title="Page Not Found">
+                <PageNotFound title="Page Not Found" />
+              </Page>
+            }
+          />
+          <Route
+            path="/*"
+            element={
+              <Page title="Page Not Found">
+                <PageNotFound title="Page Not Found" />
+              </Page>
+            }
+          />
+        </Routes>
+        <Footer />
+      </Router>
+    </div>
   );
 };
 
