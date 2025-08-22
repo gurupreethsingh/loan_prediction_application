@@ -124,11 +124,9 @@ const MainLayout = () => {
           <Route
             path="/about-us"
             element={
-              <PrivateRoute>
-                <PageTitle title="About Us">
-                  <AboutUs />
-                </PageTitle>
-              </PrivateRoute>
+              <PageTitle title="About Us">
+                <AboutUs />
+              </PageTitle>
             }
           />
 

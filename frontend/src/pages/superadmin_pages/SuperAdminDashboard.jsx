@@ -17,6 +17,7 @@ import {
   FiInbox,
   FiMessageCircle,
   FiSettings,
+  FiTrash,
 } from "react-icons/fi";
 
 const SuperAdminDashboard = () => {
@@ -190,14 +191,14 @@ const SuperAdminDashboard = () => {
               className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 text-gray-800"
             >
               <FiMessageCircle className="h-5 w-5" />
-              <span>Replies</span>
+              <span>Replies / Sent</span>
             </Link>
 
             <Link
               to="/trash"
               className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 text-gray-800"
             >
-              <FiMessageCircle className="h-5 w-5" />
+              <FiTrash className="h-5 w-5" />
               <span>Trash</span>
             </Link>
             <Link
