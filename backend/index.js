@@ -11,6 +11,7 @@ const bcrypt = require("bcrypt");
 
 // import all the routes. 
 const userRoutes = require("./routes/UserRoutes");
+const contactRoutes = require("./routes/ContactRoutes");
 
 // 2. give a name to your api backend. app = express()
 dotenv.config();
@@ -29,7 +30,7 @@ app.use(bodyParser.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use("/api", userRoutes);
-
+app.use("/api", contactRoutes);
 
 // 8. port number 3010
 const PORT = 3010;

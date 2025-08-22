@@ -7,7 +7,6 @@ import { PrivateRoute, PublicRoute } from "../auth_components/AuthManager";
 
 import Homepage from "../../pages/common_pages/Homepage";
 import PageNotFound from "../../pages/common_pages/PageNotFound";
-import ContactUs from "../../pages/common_pages/ContactUs";
 import AboutUs from "../../pages/common_pages/AboutUs";
 import Register from "../../pages/user_pages/Register";
 import Login from "../../pages/user_pages/Login";
@@ -21,6 +20,13 @@ import ForgotPassword from "../../pages/user_pages/ForgotPassword";
 import ResetPassword from "../../pages/user_pages/ResetPassword";
 
 import RoleLanding from "../common_components/RoleLanding";
+
+// contact routes.
+import ContactUs from "../../pages/contact_pages/ContactUs";
+import AllMessages from "../../pages/contact_pages/AllMessages";
+import ReplyMessage from "../../pages/contact_pages/ReplyMessage";
+import AllReplies from "../../pages/contact_pages/AllReplies";
+import Trash from "../../pages/contact_pages/Trash";
 
 // Small wrapper to set document title for each route
 const PageTitle = ({ title, children }) => {
@@ -62,7 +68,7 @@ const MainLayout = () => {
             }
           />
 
-          {/* Public pages */}
+          {/* contact pages */}
           <Route
             path="/contact-us"
             element={
@@ -71,6 +77,50 @@ const MainLayout = () => {
               </PageTitle>
             }
           />
+
+          <Route
+            path="/all-messages"
+            element={
+              <PrivateRoute allowedRoles={["superadmin"]}>
+                <PageTitle title="All-messages">
+                  <AllMessages />
+                </PageTitle>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/reply-message/:id"
+            element={
+              <PrivateRoute allowedRoles={["superadmin"]}>
+                <PageTitle title="Reply-message">
+                  <ReplyMessage />
+                </PageTitle>
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/trash"
+            element={
+              <PrivateRoute allowedRoles={["superadmin"]}>
+                <PageTitle title="Trash">
+                  <Trash />
+                </PageTitle>
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/all-replies"
+            element={
+              <PrivateRoute allowedRoles={["superadmin"]}>
+                <PageTitle title="All-replies">
+                  <AllReplies />
+                </PageTitle>
+              </PrivateRoute>
+            }
+          />
+
           <Route
             path="/about-us"
             element={
@@ -117,16 +167,6 @@ const MainLayout = () => {
               <PageTitle title="Reset Password">
                 <ResetPassword />
               </PageTitle>
-            }
-          />
-
-          {/* “Smart” dashboard route */}
-          <Route
-            path="/dashboard"
-            element={
-              <PrivateRoute>
-                <RoleLanding />
-              </PrivateRoute>
             }
           />
 
