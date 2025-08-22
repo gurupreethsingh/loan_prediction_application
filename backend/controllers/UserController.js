@@ -129,7 +129,7 @@ const login = async (req, res) => {
 
 const getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select("-password");
+    const user = await User.findById(req.params.id).select("-password").lean();
     if (!user) return res.status(404).json({ message: "User not found" });
     res.status(200).json(user);
   } catch (err) {
@@ -138,13 +138,75 @@ const getUserById = async (req, res) => {
   }
 };
 
+
+// const updateUser = async (req, res) => {
+//   try {
+//     const {
+//       name,
+//       email,
+//       phone,
+//       address,
+//       companyName,
+//       companyAddress,
+//       companyEmail,
+//       gstNumber,
+//       promotionalConsent,
+//     } = req.body;
+
+//     const user = await User.findById(req.params.id);
+//     if (!user) return res.status(404).json({ message: "User not found" });
+
+//     if (name) user.name = name;
+//     if (email) user.email = email;
+//     if (phone) user.phone = phone;
+//     if (address) user.address = { ...user.address, ...JSON.parse(address) };
+//     if (companyName) user.companyName = companyName;
+//     if (companyAddress) user.companyAddress = companyAddress;
+//     if (companyEmail) user.companyEmail = companyEmail;
+//     if (gstNumber) user.gstNumber = gstNumber;
+//     if (promotionalConsent !== undefined)
+//       user.promotionalConsent = promotionalConsent;
+
+//     if (req.file) {
+//       const newAvatarPath = path
+//         .join("uploads", user.role, req.file.filename)
+//         .replace(/\\/g, "/");
+
+//       if (user.avatar) {
+//         const oldAvatarPath = path.join(__dirname, "..", user.avatar);
+//         if (fs.existsSync(oldAvatarPath)) {
+//           fs.unlinkSync(oldAvatarPath);
+//         }
+//       }
+
+//       user.avatar = newAvatarPath;
+//     }
+
+//     await user.save();
+//     res.status(200).json(user);
+//   } catch (error) {
+//     console.error("Error updating user:", error.message);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
+
+
+
+// update user new
+
 const updateUser = async (req, res) => {
   try {
+    const id = req.params.id;
+
+    // fetch existing once (for old avatar + merging address)
+    const existing = await User.findById(id).lean();
+    if (!existing) return res.status(404).json({ message: "User not found" });
+
     const {
       name,
       email,
       phone,
-      address,
+      address, // may be JSON string with { line1, city, state, zip, country? }
       companyName,
       companyAddress,
       companyEmail,
@@ -152,42 +214,78 @@ const updateUser = async (req, res) => {
       promotionalConsent,
     } = req.body;
 
-    const user = await User.findById(req.params.id);
-    if (!user) return res.status(404).json({ message: "User not found" });
+    // build update object
+    const update = {};
 
-    if (name) user.name = name;
-    if (email) user.email = email;
-    if (phone) user.phone = phone;
-    if (address) user.address = { ...user.address, ...JSON.parse(address) };
-    if (companyName) user.companyName = companyName;
-    if (companyAddress) user.companyAddress = companyAddress;
-    if (companyEmail) user.companyEmail = companyEmail;
-    if (gstNumber) user.gstNumber = gstNumber;
-    if (promotionalConsent !== undefined)
-      user.promotionalConsent = promotionalConsent;
+    if (name !== undefined) update.name = name;
+    if (email !== undefined) update.email = email;
+    if (phone !== undefined) update.phone = phone;
 
-    if (req.file) {
-      const newAvatarPath = path
-        .join("uploads", user.role, req.file.filename)
-        .replace(/\\/g, "/");
-
-      if (user.avatar) {
-        const oldAvatarPath = path.join(__dirname, "..", user.avatar);
-        if (fs.existsSync(oldAvatarPath)) {
-          fs.unlinkSync(oldAvatarPath);
-        }
+    // map address keys from the form to your schema { street, postalCode, ... }
+    if (address !== undefined) {
+      let incoming = address;
+      if (typeof incoming === "string") {
+        try { incoming = JSON.parse(incoming); } catch { incoming = {}; }
       }
-
-      user.avatar = newAvatarPath;
+      const mapped = {
+        street: incoming.street ?? incoming.line1 ?? existing?.address?.street ?? "",
+        city: incoming.city ?? existing?.address?.city ?? "",
+        state: incoming.state ?? existing?.address?.state ?? "",
+        postalCode: incoming.postalCode ?? incoming.zip ?? existing?.address?.postalCode ?? "",
+        country: incoming.country ?? existing?.address?.country ?? "",
+      };
+      update.address = mapped;
     }
 
-    await user.save();
-    res.status(200).json(user);
+    // pass-through extra fields (not in schema) via strict:false
+    const passthrough = {};
+    if (companyName !== undefined) passthrough.companyName = companyName;
+    if (companyAddress !== undefined) passthrough.companyAddress = companyAddress;
+    if (companyEmail !== undefined) passthrough.companyEmail = companyEmail;
+    if (gstNumber !== undefined) passthrough.gstNumber = gstNumber;
+    if (promotionalConsent !== undefined) {
+      passthrough.promotionalConsent =
+        promotionalConsent === "true" || promotionalConsent === true;
+    }
+    Object.assign(update, passthrough);
+
+    // handle avatar: use the actual saved file path from Multer
+    // and delete the previous file if present
+    let oldAvatarAbs = null;
+    if (req.file) {
+      // relative path from project root (controllers/..)
+      const rel = path
+        .relative(path.join(__dirname, ".."), req.file.path)
+        .replace(/\\/g, "/");
+      update.avatar = rel;
+
+      if (existing.avatar) {
+        oldAvatarAbs = path.join(__dirname, "..", existing.avatar);
+      }
+    }
+
+    // keep your manual timestamp in sync (since schema doesn't use timestamps option)
+    update.updatedAt = new Date();
+
+    // IMPORTANT: use strict:false so unknown fields persist
+    const updated = await User.findByIdAndUpdate(
+      id,
+      { $set: update },
+      { new: true, runValidators: true, strict: false }
+    ).lean();
+
+    // delete old avatar after successful update
+    if (req.file && oldAvatarAbs && fs.existsSync(oldAvatarAbs)) {
+      try { fs.unlinkSync(oldAvatarAbs); } catch (e) { console.error("Old avatar delete failed:", e.message); }
+    }
+
+    return res.status(200).json(updated);
   } catch (error) {
     console.error("Error updating user:", error.message);
     res.status(500).json({ message: "Server error" });
   }
 };
+
 
 const deleteUser = async (req, res) => {
   try {
