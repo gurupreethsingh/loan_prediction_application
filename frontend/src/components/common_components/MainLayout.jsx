@@ -29,7 +29,7 @@ const Page = ({ title, children }) => {
 
 const MainLayout = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="bg-white">
       <Router>
         <Header />
         <Routes>
