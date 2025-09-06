@@ -189,8 +189,6 @@ exports.getMessagesCount = async (req, res) => {
   }
 };
 
-
-
 // --- TRASH / SOFT DELETE FEATURES ---
 
 // Move one message to trash (soft delete)
@@ -204,7 +202,9 @@ exports.moveMessageToTrash = async (req, res) => {
       { new: true, strict: false, lean: true }
     );
     if (!result) return res.status(404).json({ error: "Message not found" });
-    return res.status(200).json({ success: true, message: "Moved to trash", result });
+    return res
+      .status(200)
+      .json({ success: true, message: "Moved to trash", result });
   } catch (error) {
     console.error("moveMessageToTrash error:", error);
     return res.status(500).json({ error: "Server error" });
@@ -239,7 +239,9 @@ exports.purgeOldTrashed = async (req, res) => {
       { isTrashed: true, trashedAt: { $lt: cutoff } },
       { strict: false }
     );
-    return res.status(200).json({ success: true, deletedCount: result.deletedCount || 0 });
+    return res
+      .status(200)
+      .json({ success: true, deletedCount: result.deletedCount || 0 });
   } catch (error) {
     console.error("purgeOldTrashed error:", error);
     return res.status(500).json({ error: "Server error" });
@@ -254,13 +256,14 @@ exports.deleteMessagePermanently = async (req, res) => {
     if (result.deletedCount === 0) {
       return res.status(404).json({ error: "Message not found" });
     }
-    return res.status(200).json({ success: true, message: "Deleted permanently" });
+    return res
+      .status(200)
+      .json({ success: true, message: "Deleted permanently" });
   } catch (error) {
     console.error("deleteMessagePermanently error:", error);
     return res.status(500).json({ error: "Server error" });
   }
 };
-
 
 // Restore a trashed message back to active list
 exports.restoreMessage = async (req, res) => {
@@ -272,7 +275,9 @@ exports.restoreMessage = async (req, res) => {
       { new: true, strict: false, lean: true }
     );
     if (!result) return res.status(404).json({ error: "Message not found" });
-    return res.status(200).json({ success: true, message: "Message restored", result });
+    return res
+      .status(200)
+      .json({ success: true, message: "Message restored", result });
   } catch (error) {
     console.error("restoreMessage error:", error);
     return res.status(500).json({ error: "Server error" });
